@@ -7,7 +7,7 @@
     public abstract class GenericFlyable : IFlyable
     {
         internal Coordinate currentPosition;
-        internal double flightSpeed, maxAltitude; 
+        internal double baseFlightSpeed, maxAltitude; 
         protected List<Coordinate> flySchedule = new();
 
         public GenericFlyable(Coordinate location)
@@ -17,14 +17,14 @@
 
         public void FlyTo(Coordinate target)
         {
-            double time = 0;
+            double timeTaken = 0;
             if (target.Z > maxAltitude) 
             {
                 Console.WriteLine("Requested altitude exceeds allowed maximum.");
                 target.Z = maxAltitude;
             }
 
-            flySchedule = PrecalculateFlight(currentPosition, target);
+            flySchedule = PrecalculateFlightPath(currentPosition, target);
 
             Console.WriteLine("Starting. Current coordinates {0:0.000}, {1:0.000}, {2:0.000}. " +
                 "Target {3:0.000}, {4:0.000}, {5:0.000}.\"",
@@ -33,21 +33,21 @@
 
             for (int i = 1; i < flySchedule.Count; i++)
             {
-                time += flySchedule[i].Time;
+                timeTaken += flySchedule[i].Time;
                 Console.WriteLine("Flying. Current coordinates {0:0.000}, {1:0.000}, {2:0.000}, " +
                     "time in flight {3:0.00} hours.", 
-                    flySchedule[i].X, flySchedule[i].Y, flySchedule[i].Z, time);
+                    flySchedule[i].X, flySchedule[i].Y, flySchedule[i].Z, timeTaken);
             }
 
             Console.WriteLine("Arrived. Current coordinates {0:0.000}, {1:0.000}, {2:0.000}, " +
                 "time in flight {3:0.00} hours.",
-                  flySchedule[^1].X, flySchedule[^1].Y, flySchedule[^1].Z, time);
+                  flySchedule[^1].X, flySchedule[^1].Y, flySchedule[^1].Z, timeTaken);
             currentPosition = new Coordinate(flySchedule[^1].X, flySchedule[^1].Y, flySchedule[^1].Z);
         }
 
         public void GetFlyTime(Coordinate target)
         {
-            double time = 0;
+            double timeRequired = 0;
 
             if (target.Z > maxAltitude)
             {
@@ -55,13 +55,13 @@
                 target.Z = maxAltitude;
             }
 
-            flySchedule = PrecalculateFlight(currentPosition, target);
+            flySchedule = PrecalculateFlightPath(currentPosition, target);
             for (int i = 0; i < flySchedule.Count; i++) 
-            { 
-                time += flySchedule[i].Time; 
+            {
+                timeRequired += flySchedule[i].Time; 
             }
 
-            Console.WriteLine("The flight will take {0:0.00} hours.", time);
+            Console.WriteLine("The flight will take {0:0.00} hours.", timeRequired);
         }
 
         /// <summary>
@@ -70,6 +70,6 @@
         /// <param name="location">Starting point.</param>
         /// <param name="target">Requested end point.</param>
         /// <returns>List of coordinates with time it will take to reach every one.</returns>
-        protected abstract List<Coordinate> PrecalculateFlight(Coordinate location, Coordinate target);
+        protected abstract List<Coordinate> PrecalculateFlightPath(Coordinate location, Coordinate target);
     }
 }

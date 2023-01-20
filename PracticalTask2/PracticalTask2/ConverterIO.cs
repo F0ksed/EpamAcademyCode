@@ -10,14 +10,14 @@ class ConverterIO
     /// <param name="args">Uses first two input values, ignores the rest.</param>
     static void Main(string[] args)
     {
-        int inNum = 0;
-        int inBase = 10;
-        Converter converter = new Converter();
+        int inputNumber = 0;
+        int inputBase = 10;
+        NumberConverter numberConverter = new ();
 
         try
         {
-            inNum = int.Parse(args[0]);
-            inBase = int.Parse(args[1]);
+            inputNumber = int.Parse(args[0]);
+            inputBase = int.Parse(args[1]);
             if (args.Length != 2)
             {
                 Console.WriteLine("Input only 2 values - " +
@@ -25,11 +25,11 @@ class ConverterIO
             }
 
             Console.WriteLine("{0} equals {1} in base {2}", 
-                inNum, converter.ToBase(inNum, inBase), inBase);
+                inputNumber, numberConverter.ToBase(inputNumber, inputBase), inputBase);
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            Console.WriteLine(ex.Message);
+            Console.WriteLine(e.Message);
         }
     }  
 }

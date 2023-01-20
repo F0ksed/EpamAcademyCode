@@ -10,7 +10,7 @@ namespace PracticalTask3
     {
         public static List<IVehicle> Populate()
         {
-            List<IVehicle> park = new();
+            List<IVehicle> vehiclePark = new();
             
             void CreateVehicle(string type, string name, int hp, int vol, string eType, string ser,
                 int wh, string vin, int load, int gear, string tType, string manuf)
@@ -19,7 +19,7 @@ namespace PracticalTask3
                 {
                     case "Passenger car":
                         {
-                            park.Add(new PassengerCar()
+                            vehiclePark.Add(new PassengerCar()
                             {
                                 Name = name,
                                 Engine = new Engine() { Power = hp, Volume = vol, Type = eType, Serial = ser },
@@ -30,7 +30,7 @@ namespace PracticalTask3
                         }
                     case "Truck":
                         {
-                            park.Add(new Truck()
+                            vehiclePark.Add(new Truck()
                             {
                                 Name = name,
                                 Engine = new Engine() { Power = hp, Volume = vol, Type = eType, Serial = ser },
@@ -41,7 +41,7 @@ namespace PracticalTask3
                         }
                     case "Bus":
                         {
-                            park.Add(new Bus()
+                            vehiclePark.Add(new Bus()
                             {
                                 Name = name,
                                 Engine = new Engine() { Power = hp, Volume = vol, Type = eType, Serial = ser },
@@ -52,7 +52,7 @@ namespace PracticalTask3
                         }
                     case "Scooter":
                         {
-                            park.Add(new Scooter()
+                            vehiclePark.Add(new Scooter()
                             {
                                 Name = name,
                                 Engine = new Engine() { Power = hp, Volume = vol, Type = eType, Serial = ser },
@@ -63,6 +63,7 @@ namespace PracticalTask3
                         }
                 }
             }
+
 
             //passenger cars
             CreateVehicle("Passenger car", "Nissan Almera", 101, 1498, "petrol", "DJ51279", 
@@ -112,7 +113,7 @@ namespace PracticalTask3
            CreateVehicle("Scooter", "KLX 300SM", 24, 292, "petrol", "3CS16694", 
                 2, "4F2CU08102KM50866", 239, 6, "manual", "Kawasaki");
 
-           return park;
+           return vehiclePark;
         }
     }
 }

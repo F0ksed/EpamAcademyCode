@@ -8,9 +8,9 @@ class CarPark
 {
     static void Main()
     {
-        List<IVehicle> vehicles = ParkPopulator.Populate();
+        List<IVehicle> vehiclesInPark = ParkPopulator.Populate();
 
-        for (int i = 0; i < vehicles.Count; 
-            Console.WriteLine(vehicles[i].GetInfo()), i++);
+        for (int i = 0; i < vehiclesInPark.Count; 
+            Console.WriteLine(vehiclesInPark[i].GetInfo()), i++);
     }
 }

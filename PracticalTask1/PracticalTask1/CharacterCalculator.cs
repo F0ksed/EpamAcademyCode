@@ -3,20 +3,20 @@
     /// <summary>
     /// Contains logic for the calculation of maximum number of unequal consecutive characters.
     /// </summary>
-    internal class Calculator
+    internal class CharacterCalculator
     {
         /// <summary>
         /// A sequential check of all elements, adding +1 if they are unequal.
         /// </summary>
         /// <param name="userInput">A string of characters to be tallied.</param>
         /// <returns>Maximum number of unequal consecutive characters.</returns>
-        public int CalculateCharacters(string userInput)
+        public int CalculateAmount(string userInput)
         {
             //"consecutive" means they can be either 0 or >=2 in number
-            //so amount should be at least 1 for non-empty input
+            //so characterAmountCurrent should be at least 1 for non-empty input
             //and result in return 0 if it remains 1
-            int amount = 1;
-            int amountMax = 1;
+            int characterAmountCurrent = 1;
+            int characterAmountMax = 1;
 
             if (userInput.Length > 0)
             {                
@@ -24,22 +24,22 @@
                 {
                     if (userInput[i] != userInput[i + 1])
                     {
-                        amount++;
+                        characterAmountCurrent++;
                     }
-                    else if (amount > amountMax)
+                    else if (characterAmountCurrent > characterAmountMax)
                     {
-                        amountMax = amount;
-                        amount = 1;
+                        characterAmountMax = characterAmountCurrent;
+                        characterAmountCurrent = 1;
                     }
                 }
 
-                if (amount > amountMax)
+                if (characterAmountCurrent > characterAmountMax)
                 {
-                    amountMax = amount;
+                    characterAmountMax = characterAmountCurrent;
                 }           
             }
 
-            return (amountMax>1 ? amountMax : 0);
+            return (characterAmountMax>1 ? characterAmountMax : 0);
         }
     }
 }

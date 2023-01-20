@@ -15,14 +15,14 @@
         {
             var random = new Random();
             maxAltitude = 10;
-            flightSpeed = random.Next(1, 21);
-            Console.WriteLine("Bird speed is set at {0} km/h.", flightSpeed);
+            baseFlightSpeed = random.Next(1, 21);
+            Console.WriteLine("Bird speed is set at {0} km/h.", baseFlightSpeed);
             currentPosition = location;
             currentPosition.Z = (currentPosition.Z > maxAltitude) ? maxAltitude : currentPosition.Z;
             currentPosition.Z = (currentPosition.Z < minAltitude) ? 0 : currentPosition.Z;
         }
 
-        protected override List<Coordinate> PrecalculateFlight(Coordinate location, Coordinate target)
+        protected override List<Coordinate> PrecalculateFlightPath(Coordinate location, Coordinate target)
         {
             List<Coordinate> points = new() { new Coordinate(location.X, location.Y, location.Z, 0) }; 
 
@@ -54,13 +54,13 @@
             var distance = Math.Sqrt(Math.Pow((target.X - location.X), 2) +
                                         Math.Pow((target.Y - location.Y), 2) +
                                         Math.Pow((target.Z - location.Z), 2));
-            double time = distance / flightSpeed;
+            double timeRequired = distance / baseFlightSpeed;
 
-            speedVectors[0] = (target.X - location.X) / time; 
-            speedVectors[1] = (target.Y - location.Y) / time; 
-            speedVectors[2] = (target.Z - location.Z) / time;
+            speedVectors[0] = (target.X - location.X) / timeRequired; 
+            speedVectors[1] = (target.Y - location.Y) / timeRequired; 
+            speedVectors[2] = (target.Z - location.Z) / timeRequired;
 
-            while (timePassed + 1 <= time)
+            while (timePassed + 1 <= timeRequired)
             {
                 location.X += speedVectors[0]; 
                 location.Y += speedVectors[1]; 
@@ -69,7 +69,7 @@
                 timePassed++;
             }
 
-            points.Add(new Coordinate(target.X, target.Y, target.Z, time - timePassed));
+            points.Add(new Coordinate(target.X, target.Y, target.Z, timeRequired - timePassed));
             return points;
         }
 

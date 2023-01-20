@@ -2,11 +2,11 @@
 /// <summary>
 /// Practical task 1. Takes user input and returns maximum number of unequal consecutive characters.
 /// </summary>
-class MaxConsecutive
+class MaxConsecutiveCharacters
 {
     static void Main(string[] args)
     {
-        Calculator calculator = new Calculator();
+        CharacterCalculator characterCalculator = new ();
 
         if (args.Length == 0 ) 
         {
@@ -15,7 +15,7 @@ class MaxConsecutive
 
         for (int i = 0; i < args.Length; Console.WriteLine(
             "Maximum number of unequal consecutive characters in line {0} is: {1}",
-            i + 1, calculator.CalculateCharacters(args[i])), 
+            i + 1, characterCalculator.CalculateAmount(args[i])), 
             i++);
     }
 }
