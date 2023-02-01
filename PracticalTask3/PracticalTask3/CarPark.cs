@@ -1,16 +1,54 @@
-﻿using PracticalTask3;
-using PracticalTask3.Vehicles;
+﻿using PracticalTask3.Vehicles;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-/// <summary>
-/// Practical task 3. Assembles a list of vehicles and outputs it to the console.
-/// </summary>
-class CarPark
+namespace PracticalTask3
 {
-    static void Main()
+    internal class CarPark
     {
-        List<IVehicle> vehiclesInPark = ParkPopulator.Populate();
+        private Dictionary<int, IVehicle> vehiclesInside = new();
+        private int id = 0;
 
-        for (int i = 0; i < vehiclesInPark.Count; 
-            Console.WriteLine(vehiclesInPark[i].GetInfo()), i++);
+        public void AddAuto(IVehicle vehicle)
+        {
+            vehiclesInside.Add(id, vehicle);
+            id++;
+        }
+
+        public void AddAuto(List<IVehicle> vehicles)
+        {
+            foreach (IVehicle vehicle in vehicles) 
+            {
+                AddAuto(vehicle);
+            }
+        }
+
+        public void UpdateAuto() 
+        {
+
+        }
+
+        public void RemoveAuto() 
+        { 
+
+        }
+
+        public IVehicle GetAuto(int id)
+        {
+            return vehiclesInside[id];
+        }
+
+        public int GetSize()
+        {
+            return vehiclesInside.Count;
+        }
+
+        public IVehicle GetAutoByParameter(string parameter, string value)
+        {
+            return null;
+        }
     }
 }
