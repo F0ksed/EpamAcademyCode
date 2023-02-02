@@ -18,7 +18,7 @@ namespace PracticalTask3
             id++;
         }
 
-        public void AddAuto(List<IVehicle> vehicles)
+        public void AddAuto(IEnumerable<IVehicle> vehicles)
         {
             foreach (IVehicle vehicle in vehicles) 
             {
@@ -31,7 +31,7 @@ namespace PracticalTask3
 
         }
 
-        public void RemoveAuto() 
+        public void RemoveAuto(int id) 
         { 
 
         }
@@ -50,5 +50,6 @@ namespace PracticalTask3
         {
             return null;
         }
+
     }
 }
