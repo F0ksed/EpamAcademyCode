@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace PracticalTask2
 {
@@ -7,6 +8,10 @@ namespace PracticalTask2
     /// </summary>
     internal class NumberConverter
     {
+        ReadOnlyCollection<char> numerals = new(new List<char>
+                { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' });
+
         /// <summary>
         /// Using the successive division method. Implemented vocabulary only handles base no more than 20.
         /// </summary>
@@ -15,33 +20,29 @@ namespace PracticalTask2
         /// <returns>String of characters representing the number converted to requested base.</returns>
         public string ToBase(int inputNumber, int inputBase)
         {
-            var numerals = new ReadOnlyCollection<char>(new List<char>
-                { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
-                'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J' });
-            List<char> divisionResult = new();
-            string output = (inputNumber > 0) ? new("") : new("-");
+            Stack<char> divisionResult = new();
+            string output = (inputNumber >= 0) ? new("") : new("-");
 
             inputNumber = Math.Abs(inputNumber);
-            if (inputBase <= 1 || inputBase > 20)
+            if (inputBase <= 1 || inputBase > numerals.Count)
             {
-                inputBase = 10;
-                throw new Exception("Invalid base value.");
+                throw new ArgumentException("Invalid base value.");
             }
 
             if (inputBase != 10)
             {
                 do
                 {
-                    divisionResult.Add(numerals[inputNumber % inputBase]);
+                    divisionResult.Push(numerals[inputNumber % inputBase]);
                     inputNumber /= inputBase;
                 } while (inputNumber >= inputBase);
 
-                divisionResult.Add(numerals[inputNumber]);
+                divisionResult.Push(numerals[inputNumber]);
 
-                for(int i = divisionResult.Count - 1; i >= 0; i--)
+                do
                 {
-                    output += divisionResult[i];
-                }
+                    output += divisionResult.Pop();
+                } while (divisionResult.Count > 0);
 
                 return output;
             }

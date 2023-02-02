@@ -1,4 +1,5 @@
 ﻿using PracticalTask2;
+using System.Diagnostics;
 /// <summary>
 /// Practical Task 2. Takes 2 input values and converts first to the base of second.
 /// </summary>
@@ -14,6 +15,8 @@ class ConverterIO
         int inputBase = 10;
         NumberConverter numberConverter = new ();
 
+        Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+
         try
         {
             inputNumber = int.Parse(args[0]);
@@ -27,9 +30,13 @@ class ConverterIO
             Console.WriteLine("{0} equals {1} in base {2}", 
                 inputNumber, numberConverter.ToBase(inputNumber, inputBase), inputBase);
         }
-        catch (Exception e)
+        catch (FormatException e)
         {
-            Console.WriteLine(e.Message);
+            Trace.WriteLine(e);
+        }
+        catch (ArgumentException e)
+        {
+            Trace.WriteLine(e);
         }
     }  
 }
