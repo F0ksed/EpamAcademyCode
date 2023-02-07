@@ -11,9 +11,10 @@ public class XMLParser
 {
     static void Main(string[] args)
     {
-        List<IVehicle> carPark = ParkPopulator.Populate();
+        CarPark carPark = new();
+        carPark.AddAuto(ParkPopulator.Populate());
 
-        var volumeQuery = from vehicle in carPark
+        var volumeQuery = from vehicle in carPark.GetAutoList()
                     where vehicle.Engine.Volume >= 1500
                     select vehicle;
         var xmlWriter = XmlWriter.Create(new StreamWriter("Engines1500.xml"));
@@ -25,14 +26,14 @@ public class XMLParser
         }
         xmlWriter.Close();
 
-        var busNTruckQuery = from vehicle in carPark
-                             where vehicle.Type == "Bus" || vehicle.Type == "Truck"
-                             select new XElement(vehicle.Type,
+        var busNTruckQuery = from vehicle in carPark.GetAutoList()
+                             where vehicle.GetType().Name == "Bus" || vehicle.GetType().Name == "Truck"
+                             select new XElement(vehicle.GetType().Name,
                                 new XElement("Name", vehicle.Name),
                                 new XElement("Engine",
                                     new XElement("Type", vehicle.Engine.Type),
                                     new XElement("Serial", vehicle.Engine.Serial),
-                                    new XElement("Volume", vehicle.Engine.Volume)));
+                                    new XElement("Power", vehicle.Engine.Power)));
         xmlWriter = XmlWriter.Create(new StreamWriter("BusNTruck.xml"));
         xmlWriter.WriteStartElement("Root");
         foreach (var vehicle in busNTruckQuery)
@@ -42,8 +43,8 @@ public class XMLParser
         }
         xmlWriter.Close();
 
-        var transmissionQuery = from vehicle in carPark
-                     group vehicle by vehicle.Transmission.Type;
+        var transmissionQuery = from vehicle in carPark.GetAutoList()
+                                group vehicle by vehicle.Transmission.Type;
         xmlWriter = XmlWriter.Create(new StreamWriter("TransmissionType.xml"));
         xmlWriter.WriteStartElement("Root");
         foreach (var group in transmissionQuery)

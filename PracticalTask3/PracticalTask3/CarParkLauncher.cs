@@ -1,5 +1,5 @@
 ﻿using PracticalTask3;
-using PracticalTask3.Vehicles;
+using PracticalTask3.Exceptions;
 
 /// <summary>
 /// Practical task 3. Assembles a list of vehicles and outputs it to the console.
@@ -10,8 +10,9 @@ class CarParkLauncher
     {
         CarPark carPark = new();
         carPark.AddAuto(ParkPopulator.Populate());
-
-        for (int i = 0; i < carPark.GetSize(); 
-            Console.WriteLine(carPark.GetAuto(i).GetInfo()), i++);
+        foreach (var vehicle in carPark.GetAutoList())
+        {
+            Console.WriteLine(vehicle.GetInfo());
+        }
     }
 }

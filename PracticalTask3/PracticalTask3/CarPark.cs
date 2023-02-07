@@ -1,21 +1,17 @@
 ﻿using PracticalTask3.Vehicles;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PracticalTask3.Exceptions;
 
 namespace PracticalTask3
 {
-    internal class CarPark
+    public class CarPark
     {
         private Dictionary<int, IVehicle> vehiclesInside = new();
-        private int id = 0;
+        private int nextId = 0;
 
         public void AddAuto(IVehicle vehicle)
         {
-            vehiclesInside.Add(id, vehicle);
-            id++;
+            vehiclesInside.Add(nextId, vehicle);
+            nextId++;
         }
 
         public void AddAuto(IEnumerable<IVehicle> vehicles)
@@ -26,30 +22,33 @@ namespace PracticalTask3
             }
         }
 
-        public void UpdateAuto() 
+        public void UpdateAuto(int id, IVehicle vehicle) 
         {
-
+            if (vehiclesInside.ContainsKey(id))
+            {
+                vehiclesInside[id] = vehicle;
+            }
+            else
+            {
+                throw new UpdateAutoException("ID doesn't exist.");
+            }
         }
 
         public void RemoveAuto(int id) 
-        { 
-
-        }
-
-        public IVehicle GetAuto(int id)
         {
-            return vehiclesInside[id];
+            if (vehiclesInside.ContainsKey(id)) 
+            {
+                vehiclesInside.Remove(id);
+            }
+            else
+            {
+                throw new RemoveAutoException("ID doesn't exist.");
+            }
         }
 
-        public int GetSize()
+        public IEnumerable<IVehicle> GetAutoList()
         {
-            return vehiclesInside.Count;
+            return (from vehicle in vehiclesInside.Values select vehicle);
         }
-
-        public IVehicle GetAutoByParameter(string parameter, string value)
-        {
-            return null;
-        }
-
     }
 }
