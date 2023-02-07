@@ -8,7 +8,6 @@ namespace PracticalTask3.Vehicles
     public interface IVehicle
     {
         public string Name { get; init; }
-        public string Type { get; init; }
         public Engine Engine { get; init; }
         public Chassis Chassis { get; init; }
         public Transmission Transmission { get; init; }

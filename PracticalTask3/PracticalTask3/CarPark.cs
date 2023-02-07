@@ -1,16 +1,54 @@
-﻿using PracticalTask3;
-using PracticalTask3.Vehicles;
+﻿using PracticalTask3.Vehicles;
+using PracticalTask3.Exceptions;
 
-/// <summary>
-/// Practical task 3. Assembles a list of vehicles and outputs it to the console.
-/// </summary>
-class CarPark
+namespace PracticalTask3
 {
-    static void Main()
+    public class CarPark
     {
-        List<IVehicle> vehiclesInPark = ParkPopulator.Populate();
+        private Dictionary<int, IVehicle> vehiclesInside = new();
+        private int nextId = 0;
 
-        for (int i = 0; i < vehiclesInPark.Count; 
-            Console.WriteLine(vehiclesInPark[i].GetInfo()), i++);
+        public void AddAuto(IVehicle vehicle)
+        {
+            vehiclesInside.Add(nextId, vehicle);
+            nextId++;
+        }
+
+        public void AddAuto(IEnumerable<IVehicle> vehicles)
+        {
+            foreach (IVehicle vehicle in vehicles) 
+            {
+                AddAuto(vehicle);
+            }
+        }
+
+        public void UpdateAuto(int id, IVehicle vehicle) 
+        {
+            if (vehiclesInside.ContainsKey(id))
+            {
+                vehiclesInside[id] = vehicle;
+            }
+            else
+            {
+                throw new UpdateAutoException("ID doesn't exist.");
+            }
+        }
+
+        public void RemoveAuto(int id) 
+        {
+            if (vehiclesInside.ContainsKey(id)) 
+            {
+                vehiclesInside.Remove(id);
+            }
+            else
+            {
+                throw new RemoveAutoException("ID doesn't exist.");
+            }
+        }
+
+        public IEnumerable<IVehicle> GetAutoList()
+        {
+            return (from vehicle in vehiclesInside.Values select vehicle);
+        }
     }
 }
