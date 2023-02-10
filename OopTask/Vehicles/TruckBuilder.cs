@@ -1,10 +1,11 @@
 ﻿using OopTask.CarParts;
+using OopTask.Exceptions;
 
 namespace OopTask.Vehicles
 {
     internal class TruckBuilder : IVehicleBuilder
     {
-        string vehicleName = "n/a";
+        string? vehicleName;
         Engine engine = new();
         Chassis chassis = new();
         Transmission transmission = new();
@@ -32,6 +33,10 @@ namespace OopTask.Vehicles
 
         public IVehicle Build()
         {
+            if (vehicleName == null)
+            {
+                throw new InitializationException("Vehicle's name cannot be empty.");
+            }
             return new Truck()
             {
                 Name = vehicleName,

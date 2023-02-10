@@ -9,17 +9,19 @@ namespace OopTask
         private Dictionary<int, IVehicle> vehiclesInside = new();
         private int nextId = 0;
 
-        public void AddAuto(IVehicle vehicle)
+        public void AddAuto(IVehicle addedVehicle)
         {
-            try
+            foreach (IVehicle vehicle in vehiclesInside.Values)
             {
-                vehiclesInside.Add(nextId, vehicle);
-                nextId++;
+                if (vehicle.Engine.Serial == addedVehicle.Engine.Serial ||
+                    vehicle.Chassis.Vin == addedVehicle.Chassis.Vin)
+                {
+                    throw new AddException("Similar car already exists.");
+                }
             }
-            catch 
-            {
-                throw new AddException();
-            }
+
+            vehiclesInside.Add(nextId, addedVehicle);
+            nextId++;
         }
 
         public void AddAuto(IEnumerable<IVehicle> vehicles)
@@ -56,37 +58,31 @@ namespace OopTask
 
         public IEnumerable<IVehicle> GetAutoList()
         {
-            return (from vehicle in vehiclesInside.Values select vehicle);
+            return vehiclesInside.Values;
         }
 
+        /// <summary>
+        /// Searches all available vehicles for exact property values. Case sensitive. 
+        /// </summary>
+        /// <param name="parameter">Required property. Recognises dot operator for accessing lower level properties.</param>
+        /// <param name="value">Value of the required property.</param>
+        /// <returns>List of all fitting vehicles.</returns>
         public List<IVehicle> GetAutoByParameter(string parameter, string value)
         {
             List<IVehicle> fittingVehicles = new();
-            List<string> decoupledParameters = new() { "" };
-            object propinf;
-
-            for (int i = 0; i < parameter.Length; i++)
-            {
-                if (parameter[i] != '.')
-                {
-                    decoupledParameters[^1] += parameter[i];
-                }
-                else
-                {
-                    decoupledParameters.Add("");
-                }
-            }
+            object propertyInfo;
+            string[] decoupledParameters = parameter.Split('.');
 
             foreach (var vehicle in vehiclesInside.Values)
             {
-                propinf = GetProperty(decoupledParameters[0], vehicle);
+                propertyInfo = GetProperty(decoupledParameters[0], vehicle);
 
-                for (int i = 1; i < decoupledParameters.Count; i++) 
+                for (int i = 1; i < decoupledParameters.Length; i++) 
                 {
-                    propinf = GetProperty(decoupledParameters[i], propinf);
+                    propertyInfo = GetProperty(decoupledParameters[i], propertyInfo);
                 }
 
-                if (propinf.ToString() == value)
+                if (propertyInfo.ToString() == value)
                 {
                     fittingVehicles.Add(vehicle);
                 }
@@ -94,17 +90,28 @@ namespace OopTask
             return fittingVehicles;
         }
 
-        private object? GetProperty(string property, object obj)
+        /// <summary>
+        /// Used to make a search loop in GetAutoByParameter.
+        /// </summary>
+        /// <exception cref="GetAutoByParameterException"></exception>
+        private object GetProperty(string property, object obj)
         {
-        foreach (PropertyInfo propertyInfo in obj.GetType().GetProperties())
-        {
-            if (propertyInfo.Name == property)
+            foreach (PropertyInfo propertyInfo in obj.GetType().GetProperties())
             {
-                return propertyInfo.GetValue(obj);
+                if (propertyInfo.Name == property)
+                {
+                    if (propertyInfo.GetValue(obj) != null)
+                    {
+                        return propertyInfo.GetValue(obj);
+                    }
+                    else
+                    {
+                        throw new GetAutoByParameterException("Property is null.");
+                    }
+                }
             }
-        }
 
-        throw new GetAutoByParameterException("Property not found");
-        }
+            throw new GetAutoByParameterException("Property not found.");
+        }        
     }
 }
