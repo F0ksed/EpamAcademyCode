@@ -1,0 +1,94 @@
+﻿using ObjectOrientedDesignPrinciplesTask.Cars;
+using System.Diagnostics;
+
+namespace ObjectOrientedDesignPrinciplesTask.Commands
+{
+    internal class CommandHandler
+    {
+        private static CommandHandler singletonRef;
+        CarInventory carInventory;
+
+        private CommandHandler() {}
+
+        public static CommandHandler Create()
+        {
+            if (singletonRef == null)
+            {
+                singletonRef = new CommandHandler();
+            }
+            return singletonRef; 
+        }
+        
+        public void MakeInventory(string[] input)
+        {
+            carInventory = new();
+
+            try
+            {
+                for (int i = 0; i < input.Length; i += 4)
+                {
+                    carInventory.AddNewEntry(input[i], input[i + 1], int.Parse(input[i + 2]), int.Parse(input[i + 3]));
+                }
+            }
+            catch (Exception e) when (e is IndexOutOfRangeException ||
+                                      e is FormatException)
+            {
+                Trace.WriteLine(e);
+                carInventory = new(); //reset inventory so it won't remain half-filled with possibly incorrect input
+                return;
+            }
+
+            Console.WriteLine("List formed successfully, input your command.");
+        }
+
+        public void ExecuteCountCommand(string input)
+        {
+            object output;
+
+            switch (input) 
+            {
+                case "count":
+                    {
+                        output = (from entry in carInventory.GetAll() 
+                                    group entry by entry.CarType.Brand).Count();
+                        break;
+                    }
+                case "count all":
+                    {
+                        output = (from entry in carInventory.GetAll() 
+                                    select +entry.Quantity).Sum();
+                        break;
+                    }
+                    default: 
+                    {
+                        output = "Command not recognised.";
+                        break;
+                    }
+            }
+
+            Console.WriteLine(output);
+        }
+
+        public void ExecuteAveragePriceCommand(string input)
+        {
+            //TODO figure out how to handle division by 0 cases
+            if (input == "average price")
+            {
+                Console.WriteLine((from entry in carInventory.GetAll() 
+                                   select entry.CostPerUnit).Sum() /
+                                  (from entry in carInventory.GetAll() 
+                                   select entry).Count());
+                return;
+            }
+
+            input = input.Replace("average price ", "");
+            var q = (from entry in carInventory.GetAll()
+                    where entry.CarType.Brand == input
+                    select entry.CostPerUnit).Sum()/
+                    (from entry in carInventory.GetAll()
+                     where entry.CarType.Brand == input
+                     select entry).Count();
+            Console.WriteLine(q);
+        }
+    }
+}
