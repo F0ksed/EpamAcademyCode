@@ -2,8 +2,18 @@
 {
     internal class CarType : ICarType
     {
-        public string Brand { get; init; }
-        public string Model { get; init; }
+        private string brand, model;
+
+        public string Brand 
+        { 
+            get { return brand; }
+            init { brand = value.ToLower(); } 
+        }
+        public string Model
+        {
+            get { return model; }
+            init { model = value.ToLower(); }
+        }
 
         public CarType(string brand, string model)
         {

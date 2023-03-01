@@ -1,11 +1,11 @@
 ﻿namespace ObjectOrientedDesignPrinciplesTask.Commands
 {
-    internal class AveragePriceCommand: ICommand
+    internal class AveragePriceBrandCommand: ICommand
     {
         CommandHandler handler;
         string payload;
 
-        public AveragePriceCommand(CommandHandler handler, string payload)
+        public AveragePriceBrandCommand(CommandHandler handler, string payload)
         {
             this.handler = handler;
             this.payload = payload;
@@ -13,7 +13,7 @@
 
         public void Execute() 
         {
-            handler.ExecuteAveragePriceCommand(payload);
+            handler.ExecuteAveragePriceBrandCommand(payload);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace ObjectOrientedDesignPrinciplesTask.Commands
 
             switch (input) 
             {
-                case "count":
+                case "count types":
                     {
                         output = (from entry in carInventory.GetAll() 
                                     group entry by entry.CarType.Brand).Count();
@@ -69,26 +69,31 @@ namespace ObjectOrientedDesignPrinciplesTask.Commands
             Console.WriteLine(output);
         }
 
-        public void ExecuteAveragePriceCommand(string input)
+        public void ExecuteAveragePriceBrandCommand(string input)
         {
-            //TODO figure out how to handle division by 0 cases
-            if (input == "average price")
+            int priceSum = (from entry in carInventory.GetAll() select entry.CostPerUnit).Sum();
+            int brandCount = (from entry in carInventory.GetAll() select entry).Count();
+
+            if (input is not "average price")
             {
-                Console.WriteLine((from entry in carInventory.GetAll() 
-                                   select entry.CostPerUnit).Sum() /
-                                  (from entry in carInventory.GetAll() 
-                                   select entry).Count());
+                input = input.Replace("average price ", "");
+                foreach (var entry in carInventory.GetAll()) 
+                {
+                    if (entry.CarType.Brand != input)
+                    {
+                        priceSum -= entry.CostPerUnit;
+                        brandCount -= 1;
+                    }
+                }
+            }
+            if (brandCount >0) 
+            {
+                Console.WriteLine(priceSum/brandCount);
                 return;
             }
 
-            input = input.Replace("average price ", "");
-            var q = (from entry in carInventory.GetAll()
-                    where entry.CarType.Brand == input
-                    select entry.CostPerUnit).Sum()/
-                    (from entry in carInventory.GetAll()
-                     where entry.CarType.Brand == input
-                     select entry).Count();
-            Console.WriteLine(q);
+            Console.WriteLine("No entries found for the requested value.");
+
         }
     }
 }

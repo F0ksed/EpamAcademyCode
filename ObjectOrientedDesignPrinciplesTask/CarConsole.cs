@@ -14,7 +14,7 @@ public class CarConsole
 
         while (true) 
         {
-            string input = Console.ReadLine();
+            string input = Console.ReadLine().ToLower();
 
             switch (true)
             {
@@ -30,7 +30,7 @@ public class CarConsole
                     }
                 case true when input.Contains("average price"):
                     {
-                        invoker.SetCommand(new AveragePriceCommand(handler, input));
+                        invoker.SetCommand(new AveragePriceBrandCommand(handler, input));
                         invoker.ExecuteCommand();
                         break;
                     }
