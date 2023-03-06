@@ -43,7 +43,7 @@ class MaxConsecutiveCharacters
                     }
                 default: 
                     {
-                        Console.WriteLine("Unequal characters, identical latin letters and identical digits are available. ");
+                        Console.WriteLine("Input \"Unequal characters\", \"identical latin letters\" or \"identical digits\".");
                         break;
                     }
             }

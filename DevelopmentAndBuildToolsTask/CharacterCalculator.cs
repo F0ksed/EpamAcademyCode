@@ -3,51 +3,51 @@
     /// <summary>
     /// Contains logic for the calculation of maximum number of unequal consecutive characters.
     /// </summary>
-    internal class CharacterCalculator
+    public class CharacterCalculator
     {
         public int CalculateUnequalConsecutiveAmount(string userInput)
         {
-            Comparer comparer= new Comparer(StrategiesOfComparison.AnyUnequalConsecutiveStrategy);
+            IComparer comparer = new ComparerWithMemory(StrategiesOfComparison.AnyUnequalConsecutiveStrategy);
 
-            if (userInput.Length > 0)
+            if (userInput!= null && userInput.Length > 0)
             {
                 for (int i = 0; i < userInput.Length - 1; i++)
                 {
-                    comparer.Compare(userInput[i], userInput[i + 1]);
+                    comparer.CompareAndAddResult(userInput[i], userInput[i + 1]);
                 }          
             }
 
-            return (comparer.GetResult()>1 ? comparer.GetResult() : 0);
+            return (comparer.GetCurrentResult()>1 ? comparer.GetCurrentResult() : 0);
         }
 
         public int CalculateConsecutiveIdenticalLatinLettersAmount(string userInput)
         {
-            Comparer comparer = new Comparer(StrategiesOfComparison.ConsecutiveIdenticalLatinLettersStrategy);
+            IComparer comparer = new ComparerWithMemory(StrategiesOfComparison.ConsecutiveIdenticalLatinLettersStrategy);
 
-            if (userInput.Length > 0)
+            if (userInput != null && userInput.Length > 0)
             {
                 for (int i = 0; i < userInput.Length - 1; i++)
                 {
-                    comparer.Compare(userInput[i], userInput[i + 1]);
+                    comparer.CompareAndAddResult(userInput[i], userInput[i + 1]);
                 }
             }
 
-            return (comparer.GetResult() > 1 ? comparer.GetResult() : 0);
+            return (comparer.GetCurrentResult() > 1 ? comparer.GetCurrentResult() : 0);
         }
 
         public int CalculateConsecutiveIdenticalDigitsAmount(string userInput)
         {
-            Comparer comparer = new Comparer(StrategiesOfComparison.ConsecutiveIdenticalDigitsStrategy);
+            IComparer comparer = new ComparerWithMemory(StrategiesOfComparison.ConsecutiveIdenticalDigitsStrategy);
 
-            if (userInput.Length > 0)
+            if (userInput != null && userInput.Length > 0)
             {
                 for (int i = 0; i < userInput.Length - 1; i++)
                 {
-                    comparer.Compare(userInput[i], userInput[i + 1]);
+                    comparer.CompareAndAddResult(userInput[i], userInput[i + 1]);
                 }
             }
 
-            return (comparer.GetResult() > 1 ? comparer.GetResult() : 0);
+            return (comparer.GetCurrentResult() > 1 ? comparer.GetCurrentResult() : 0);
         }
     }
 }

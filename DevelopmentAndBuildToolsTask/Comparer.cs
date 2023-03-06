@@ -4,12 +4,12 @@
     /// A sequential check of two elements, adding +1 if they are unequal.
     /// Returns current highest count on request of GetResult.
     /// </summary>
-    internal class Comparer
+    internal class ComparerWithMemory: IComparer
     {
         int characterAmountCurrent, characterAmountMax;
         Func<char, char, bool> strategy;
 
-        public Comparer(Func<char, char, bool> strategy) 
+        public ComparerWithMemory(Func<char, char, bool> strategy) 
         {
             //"consecutive" means they can be either 0 or >=2 in number
             //so characterAmountCurrent should be at least 1 for non-empty input
@@ -19,7 +19,7 @@
             this.strategy = strategy;
         }
 
-        public void Compare(char current, char next)
+        public void CompareAndAddResult(char current, char next)
         {
             if (strategy(current, next))
             {
@@ -35,7 +35,7 @@
             }
         }
 
-        public int GetResult()
+        public int GetCurrentResult()
         { 
             return (characterAmountMax > characterAmountCurrent ? characterAmountMax : characterAmountCurrent); 
         }
