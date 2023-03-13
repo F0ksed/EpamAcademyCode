@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetCollectionsTask", "Do
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ObjectOrientedDesignPrinciplesTask", "ObjectOrientedDesignPrinciplesTask\ObjectOrientedDesignPrinciplesTask.csproj", "{3232D762-0B7B-42D9-B464-404014C332E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestsForDevelopmentAndBuildToolsTask", "TestsForDevelopmentAndBuildToolsTask\TestsForDevelopmentAndBuildToolsTask.csproj", "{6F3E2912-64BF-47A5-BBBF-422899222FCA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestsForDevelopmentAndBuildToolsTask", "TestsForDevelopmentAndBuildToolsTask\TestsForDevelopmentAndBuildToolsTask.csproj", "{6F3E2912-64BF-47A5-BBBF-422899222FCA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocatorsTask", "LocatorsTask\LocatorsTask.csproj", "{35589A13-8E5F-402C-BD0C-5467329F70ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{6F3E2912-64BF-47A5-BBBF-422899222FCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F3E2912-64BF-47A5-BBBF-422899222FCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F3E2912-64BF-47A5-BBBF-422899222FCA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35589A13-8E5F-402C-BD0C-5467329F70ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35589A13-8E5F-402C-BD0C-5467329F70ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35589A13-8E5F-402C-BD0C-5467329F70ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35589A13-8E5F-402C-BD0C-5467329F70ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
