@@ -3,13 +3,15 @@ using OpenQA.Selenium.Firefox;
 
 namespace LocatorsTask
 {
+
     public class AxesTaskFirefox
     {
+        private readonly WebDriver driver = new FirefoxDriver();
+        private readonly string url = "https://www.bbc.com/sport";
+
         [Fact]
         public void Header_Search_Box_Click_Leads_To_Search_Page()
         {
-            WebDriver driver = new FirefoxDriver();
-            string url = "https://www.bbc.com/sport";
             IWebElement searchBox;
             string resultUrl;
             string expectedUrl = "https://www.bbc.co.uk/search?d=SPORT_GNL";
@@ -20,14 +22,12 @@ namespace LocatorsTask
             resultUrl = driver.Url;
             driver.Quit();
 
-            Assert.True(resultUrl == expectedUrl);
+            Assert.Equal(resultUrl, expectedUrl);
         }
 
         [Fact]
         public void Header_Logo_Is_Corecct_Svg_Bbc_Logo()
         {
-            WebDriver driver = new FirefoxDriver();
-            string url = "https://www.bbc.com/sport";
             IReadOnlyCollection<IWebElement> svgsInHeader;
             bool logoExists = false;
             string expectedBbcLogo = "M111.99999,4.44444577e-05 L111.99999,32.0000444 L79.9999905,32.0000444 L79.9999905," +
@@ -83,14 +83,13 @@ namespace LocatorsTask
                 }
             }
             driver.Quit();
+
             Assert.True(logoExists);
         }
 
         [Fact]
         public void All_Sports_Button_Click_Opens_Dropdown_Menu()
         {
-            WebDriver driver = new FirefoxDriver();
-            string url = "https://www.bbc.com/sport";
             IWebElement allSportsButton, dropdownMenu;
             string result = "";
 
@@ -101,7 +100,7 @@ namespace LocatorsTask
             result = dropdownMenu.GetAttribute("hidden");
             driver.Quit();
 
-            Assert.True(result is null);
+            Assert.Null(result);
         }
     }
 }
