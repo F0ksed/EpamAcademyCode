@@ -1,6 +1,6 @@
 ﻿using OpenQA.Selenium;
 
-namespace WebdriverTask
+namespace WebdriverTask.ProtonMail
 {
     internal class ProtonSettingPage
     {
