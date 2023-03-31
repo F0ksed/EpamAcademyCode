@@ -1,20 +1,13 @@
 ﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 
-namespace WebdriverTask.ProtonMail
+namespace WebdriverTask.ProtonMail.InboxPage
 {
-    internal class ProtonInboxPageMap
+    internal class ProtonInboxPageMap : ProtonHeaderMap
     {
-        private readonly IWebDriver driver;
-        private readonly string url = "https://mail.proton.me/u/0/inbox";
-        private readonly WebDriverWait wait;
+        protected readonly string url = "https://mail.proton.me/u/0/inbox";
 
-        public ProtonInboxPageMap(IWebDriver driver)
-        {
-            this.driver = driver;
-            wait = new(this.driver, TimeSpan.FromSeconds(15));
-        }
+        public ProtonInboxPageMap(IWebDriver driver) : base(driver) { }
 
         public IWebElement NewMessageButton
         {
@@ -43,18 +36,11 @@ namespace WebdriverTask.ProtonMail
             }
         }
 
-        public IWebElement MessageWindow
-        {
-            get
-            {
-                return driver.FindElement(By.XPath("/html/body/div[1]/div[4]"));
-            }
-        }
-
         public IWebElement ComposeMessageAdressToField
         {
             get
             {
+                wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//input[@data-testid = 'composer:to']")));
                 return driver.FindElement(By.XPath("//input[@data-testid = 'composer:to']"));
             }
         }
@@ -63,6 +49,7 @@ namespace WebdriverTask.ProtonMail
         {
             get
             {
+                wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//input[@data-testid = 'composer:subject']")));
                 return driver.FindElement(By.XPath("//input[@data-testid = 'composer:subject']"));
             }
         }
@@ -71,6 +58,7 @@ namespace WebdriverTask.ProtonMail
         {
             get
             {
+                wait.Until(ExpectedConditions.ElementIsVisible(By.Id("rooster-editor")));
                 return driver.FindElement(By.Id("rooster-editor"));
             }
         }
@@ -79,6 +67,7 @@ namespace WebdriverTask.ProtonMail
         {
             get
             {
+                wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//button[@data-testid = 'composer:send-button']")));
                 return driver.FindElement(By.XPath("//button[@data-testid = 'composer:send-button']"));
             }
         }
@@ -94,17 +83,22 @@ namespace WebdriverTask.ProtonMail
 
         public string MailSender(IWebElement mail)
         {
-            return mail.FindElement(By.XPath(".//descendant::*[@data-testid= 'message-column:sender-address']")).GetAttribute("title");
+            return mail.FindElement(By.XPath(".//descendant::*[@title][@data-testid[contains(., 'sender-address')]]")).GetAttribute("title");
         }
 
-        public string MailTopic(IWebElement mail)
+        public string MailSubject(IWebElement mail)
         {
-            return mail.FindElement(By.XPath(".//descendant::*[@data-testid= 'message-row:subject']")).GetAttribute("title");
+            return mail.FindElement(By.XPath(".//descendant::*[@title][@data-testid[contains(., 'subject')]]")).GetAttribute("title");
         }
 
         public bool IsUnread(IWebElement mail)
         {
-            return mail.FindElements(By.XPath("self::div[@class[contains(., 'unread')]]")).Count() > 0;
+            return mail.FindElements(By.XPath(".//self::*[@class[contains(., 'unread')]]")).Count() > 0;
+        }
+
+        public string MailBody()
+        {     
+            return driver.FindElement(By.XPath("//*[text()]")).Text;
         }
     }
 }

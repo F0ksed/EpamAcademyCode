@@ -1,78 +1,82 @@
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using WebdriverTask.GMail.LoginPage;
+using WebdriverTask.GMail.InboxPage;
+using WebdriverTask.Gmail.InboxPage;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
+using WebdriverTask.ProtonMail.LoginPage;
+using WebdriverTask.ProtonMail.InboxPage;
+using WebdriverTask.ProtonMail.SettingsPage;
 using WebdriverTask.ProtonMail;
-using WebdriverTask.GMail;
 
 namespace WebdriverTask
 {
     public class GmailProtonMailSendTests
     {
-        IWebDriver driver = new ChromeDriver();
-        string correctProtonEmailAddress = "WebdriverTest@proton.me";
-        string correctProtonEmailPassword = "8xG79Y5Qd3S6WAR";
-        string correctGmailAddress = "WebdriverTest70@gmail.com";
-        string correctGmailPassword = "CEgKiVex5sx8fuy";
-        string protonLoginPageUrl = "https://account.proton.me/login";
-        string protonInboxUrl = "https://mail.proton.me/u/0/inbox";
-        string messageSubject;
-        string messageBody;
-
-        WebDriverWait wait;
-        GmailLoginPage gmailLoginPage;
-        GmailInboxPage gmailInboxPage;
-        ProtonLoginPage protonLoginPage;
-        ProtonInboxPage protonInboxPage;
-
         [Fact]
-        public void Proton_Login_With_Correct_Credentials_Redirect_To_Inbox()
+        public void Proton_Gmais_Exchange_Mail_And_Proton_Changes_Displayname()
         {
-            string actualUrl;
-            protonLoginPage = new(driver);
-            wait = new(driver, TimeSpan.FromSeconds(10));
+            IWebDriver driver = new ChromeDriver();
+            ChromeOptions chromeOptions = new();
+            WebDriverWait wait = new(driver, TimeSpan.FromSeconds(10));
 
-            protonLoginPage.Navigate();
-            wait.Until(ExpectedConditions.UrlContains(protonLoginPageUrl));
-            protonLoginPage.LogIn(correctProtonEmailAddress, correctProtonEmailPassword);
-            wait.Until(ExpectedConditions.UrlContains(protonInboxUrl));
-            actualUrl = driver.Url;
+            string protonEmailAddress = "WebdriverTest@proton.me";
+            string protonEmailPassword = "8xG79Y5Qd3S6WAR";
+            string gmailAddress = "WebdriverTest70@gmail.com";
+            string gmailPassword = "CEgKiVex5sx8fuy";
+            string protonInboxUrl = "https://mail.proton.me/u/0/inbox";
+            string protonSettingsUrl = "https://account.proton.me/u/6/mail/account-password";
+            string gmailInboxUrl = "https://mail.google.com/mail/u/0/#inbox";
+            string protonMessageSubject = Faker.Lorem.Sentence(3);
+            string protonMessageBody = Faker.Lorem.Paragraph();
+            string gmailMessageBody = Faker.Name.First() + " " + Faker.Name.Last();
+            string protonWindowHandle;
 
-            protonLoginPage.Validator.ValidateLoginSuccess(protonInboxUrl);
-        }
-                
-        public void Gmail_Login_With_Correct_Credentials_Redirect_To_Inbox()
-        {
-            string actualUrl;
-            gmailLoginPage = new(driver);
+            ProtonLoginPage protonLoginPage = new(driver);
+            ProtonInboxPage protonInboxPage = new(driver);
+            ProtonAccountAndPasswordPage protonAccountAndPasswordPage = new(driver);
+            GmailLoginPage gmailLoginPage = new(driver);
+            GmailMailListPage gmailMailListPage = new(driver);
+            GmailOpenedLetterPage gmailOpenedLetterPage = new(driver);
 
-            gmailLoginPage.Navigate();
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-            gmailLoginPage.LogIn(correctGmailAddress, correctGmailPassword);
-            actualUrl = driver.Url;
-        }
+            chromeOptions.AddArgument("--lang=la");
+            chromeOptions.AddArguments("--start-maximized");
 
-        [Fact]
-        public void Mail_Send_From_Proton_Reaches_Designated_Gmail_Address()
-        {
-            protonInboxPage = new(driver);
+            try
+            {
+                protonLoginPage.Navigate();
+                protonLoginPage.LogIn(protonEmailAddress, protonEmailPassword);
+                protonLoginPage.Validator.ValidateLoginSuccess(protonInboxUrl);
+                protonInboxPage.SendMail(gmailAddress, protonMessageSubject, protonMessageBody);
+                protonWindowHandle = driver.CurrentWindowHandle;
 
-            protonLoginPage.LogIn(correctProtonEmailAddress, correctProtonEmailPassword);
-            driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-            protonInboxPage.SendMail(correctGmailAddress, "Test message subject", "Test message text2");
+                driver.SwitchTo().NewWindow(WindowType.Tab);
+                gmailLoginPage.Navigate();
+                gmailLoginPage.LogIn(gmailAddress, gmailPassword);
+                gmailLoginPage.Validator.ValidateLoginSuccess(gmailInboxUrl);
 
-        }
+                gmailMailListPage.Validator.ValidateMailArrival(protonEmailAddress, protonMessageSubject);
+                gmailMailListPage.SelectMail(protonEmailAddress, protonMessageSubject);
+                gmailMailListPage.OpenSelectedMail();
+                gmailOpenedLetterPage.Validator.ValidateMailContent(protonMessageBody);
+                gmailOpenedLetterPage.Reply(gmailMessageBody);
 
-        [Fact]
-        public void CheckSentMail()
-        {
-            protonLoginPage = new(driver);
-            protonInboxPage = new(driver);
+                driver.SwitchTo().Window(protonWindowHandle);
+                protonInboxPage.Validator.ValidateMailArrival(gmailAddress, protonMessageSubject);
+                protonInboxPage.SelectMail(gmailAddress, protonMessageSubject);
+                protonInboxPage.OpenSelectedMail();
+                protonInboxPage.Validator.ValidateMailContent(gmailMessageBody);
 
-            protonLoginPage.Navigate();
-            protonLoginPage.LogIn(correctProtonEmailAddress, correctProtonEmailPassword);
-
-            protonInboxPage.Validator.ValidateMailArrival("ardos125@gmail.com", "Saaa");
+                protonAccountAndPasswordPage.Navigate();
+                protonAccountAndPasswordPage.ChangeDisplayname(gmailMessageBody);
+                protonAccountAndPasswordPage.Validator.ValidateDisplaynameChange(gmailMessageBody);
+                protonAccountAndPasswordPage.Validator.ValidateHeaderDisplaynameChange(gmailMessageBody);
+            }
+            finally
+            {
+                driver.Quit();
+            }
         }
     }
 }

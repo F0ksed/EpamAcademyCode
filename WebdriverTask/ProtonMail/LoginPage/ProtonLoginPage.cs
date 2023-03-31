@@ -1,16 +1,19 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 
-namespace WebdriverTask.ProtonMail
+namespace WebdriverTask.ProtonMail.LoginPage
 {
     internal class ProtonLoginPage
     {
-        private readonly IWebDriver driver;
-        private readonly string url = "https://account.proton.me/login";
+        protected readonly IWebDriver driver;
+        protected readonly string url = "https://account.proton.me/login";
+        WebDriverWait wait;
 
         public ProtonLoginPage(IWebDriver driver)
         {
             this.driver = driver;
+            wait = new(this.driver, TimeSpan.FromSeconds(60));
         }
 
         public ProtonLoginPageValidator Validator
