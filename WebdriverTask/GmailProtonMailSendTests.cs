@@ -4,11 +4,9 @@ using WebdriverTask.GMail.LoginPage;
 using WebdriverTask.GMail.InboxPage;
 using WebdriverTask.Gmail.InboxPage;
 using OpenQA.Selenium.Support.UI;
-using SeleniumExtras.WaitHelpers;
 using WebdriverTask.ProtonMail.LoginPage;
 using WebdriverTask.ProtonMail.InboxPage;
 using WebdriverTask.ProtonMail.SettingsPage;
-using WebdriverTask.ProtonMail;
 
 namespace WebdriverTask
 {
@@ -41,10 +39,10 @@ namespace WebdriverTask
             GmailOpenedLetterPage gmailOpenedLetterPage = new(driver);
 
             chromeOptions.AddArgument("--lang=la");
-            chromeOptions.AddArguments("--start-maximized");
 
             try
             {
+                driver.Manage().Window.Maximize();
                 protonLoginPage.Navigate();
                 protonLoginPage.LogIn(protonEmailAddress, protonEmailPassword);
                 protonLoginPage.Validator.ValidateLoginSuccess(protonInboxUrl);
