@@ -81,10 +81,9 @@ namespace WebdriverTask.ProtonMail.InboxPage
             }
         }
 
-        public string MailSender(IWebElement mail)
-        {
-            return mail.FindElement(By.XPath(".//descendant::*[@title][@data-testid[contains(., 'sender-address')]]")).GetAttribute("title");
-        }
+        public string MailSender(IWebElement mail)=>mail.FindElement(By.XPath
+            (".//descendant::*[@title][@data-testid[contains(., 'sender-address')]]")).GetAttribute("title");
+        
 
         public string MailSubject(IWebElement mail)
         {
