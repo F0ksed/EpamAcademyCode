@@ -1,27 +1,16 @@
 using FrameworkTask.Driver;
 using FrameworkTask.Model;
 using FrameworkTask.Pages;
+using FrameworkTask.Service;
 using OpenQA.Selenium;
+using System.Reflection;
 
 namespace FrameworkTask.Tests
 {
-    public class GoogleCloudPlatformPricingCalculatorMailEstimateTest : IDisposable
+    public class GoogleCloudPlatformPricingCalculatorMailEstimateTest : BaseTest
     {
-        DriverSingleton driverSingleton;
-        CloudGoogleCalculatorPage cloudGoogleCalculatorPage;
-        YopmailPage yopmailPage;
-        ComputeEngineRequestModel model;
-
-        public GoogleCloudPlatformPricingCalculatorMailEstimateTest()
-        {
-            driverSingleton = DriverSingleton.Create("");
-            cloudGoogleCalculatorPage = new(driverSingleton.GetDriver);
-            yopmailPage = new(driverSingleton.GetDriver);
-            model = new();
-        }
-
         [Fact]
-        public void Test1()
+        public void GoogleCloudPlatformPricing()
         {
             cloudGoogleCalculatorPage.Navigate();
             cloudGoogleCalculatorPage.FillRequest(model);
@@ -37,11 +26,9 @@ namespace FrameworkTask.Tests
             driverSingleton.GetDriver.SwitchTo().Window(googleCalculatorWindowHandle);
             cloudGoogleCalculatorPage.MailEstimatedCost(address);
             driverSingleton.GetDriver.SwitchTo().Window(yopmailPageWindowHandle);
-        }
 
-        public void Dispose()
-        {
-            driverSingleton.CloseDriver();
+            yopmailPage.CheckMail("Google Cloud Price Estimate", 2);
+
         }
     }
 }

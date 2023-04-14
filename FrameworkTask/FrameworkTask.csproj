@@ -8,14 +8,19 @@
     <IsPackable>false</IsPackable>
 
     <Configurations>Debug;Release;Smoke</Configurations>
+
+    <PlatformTarget>x64</PlatformTarget>
+
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="NLog" Version="5.1.3" />
     <PackageReference Include="Selenium.WebDriver" Version="4.8.2" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
     <PackageReference Include="WebDriverManager" Version="2.16.2" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
@@ -28,8 +33,8 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Config\" />
-  </ItemGroup>
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="xcopy /Y /I &quot;$(ProjectDir)\Config\appsettings.$(ConfigurationName).json&quot; &quot;$(TargetDir)\Config\&quot;" />
+  </Target>
 
 </Project>

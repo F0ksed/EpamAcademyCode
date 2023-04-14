@@ -7,7 +7,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <Configurations>Debug;Release;Smoke</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

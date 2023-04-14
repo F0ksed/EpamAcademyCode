@@ -4,7 +4,7 @@ using SeleniumExtras.WaitHelpers;
 
 namespace FrameworkTask.Pages
 {
-    internal class YopmailPage
+    public class YopmailPage
     {
         IWebDriver driver;
         WebDriverWait wait;
@@ -27,28 +27,54 @@ namespace FrameworkTask.Pages
         public void Navigate()
         {
             driver.Navigate().GoToUrl(url);
-            if (Map.AcceptNecesaryCookiesButton.Displayed)
+            if (Map.AcceptNecesaryCookiesButton.Count() >0)
             {
-                Map.AcceptNecesaryCookiesButton.Click();
+                Map.AcceptNecesaryCookiesButton.FirstOrDefault().Click();
             }
         }
 
         public void CreateNewMailbox()
         {
-            Map.CreateRandomAddressButton.Click();
-            wait.Until(ExpectedConditions.ElementExists(Map.CheckMailButton));
-            if (Map.AcceptNecesaryCookiesButton.Displayed)
+            Map.CreateRandomAddressButton.Click();            
+            if (Map.AcceptNecesaryCookiesButton.Count() > 0)
             {
-                Map.AcceptNecesaryCookiesButton.Click();
+                Map.AcceptNecesaryCookiesButton.FirstOrDefault().Click();
             }
 
-            driver.FindElement(Map.CheckMailButton).Click();
-            wait.Until(ExpectedConditions.ElementExists(Map.CurrentMailboxAddress));
+            Map.CheckMailButton.Click();
         }
 
         public string GetMailAddress()
         {
-            return driver.FindElement(Map.CurrentMailboxAddress).Text;
+            return Map.CurrentMailboxAddress.Text;
+        }
+
+        //hack
+        public void CheckMail(string subject, int tries = 2)
+        {
+            int i = 0;
+            while (true)
+            {
+                Map.RefreshButton.Click();
+                try
+                {
+                    driver.SwitchTo().Frame("ifinbox");
+                    wait.Until(ExpectedConditions.ElementExists(By.XPath($"//*[text()[contains(., '{subject}')]]")));
+                    break;
+                }
+                catch (WebDriverTimeoutException e)
+                {
+                    i++;
+                    if (i>=tries) 
+                    {
+                        throw;
+                    }
+                }
+                finally
+                {
+                    driver.SwitchTo().DefaultContent();
+                }
+            }
         }
     }
 }

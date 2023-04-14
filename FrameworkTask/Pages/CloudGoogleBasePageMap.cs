@@ -12,7 +12,7 @@ namespace FrameworkTask.Pages
         public CloudGoogleBasePageMap(IWebDriver driver)
         {
             this.driver = driver;
-            wait = new(this.driver, TimeSpan.FromSeconds(5));
+            wait = new(this.driver, TimeSpan.FromSeconds(10));
         }
 
         public IWebElement SearchBar => driver.FindElement(searchBar);

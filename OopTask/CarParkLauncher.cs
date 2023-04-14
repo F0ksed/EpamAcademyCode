@@ -21,7 +21,7 @@ class CarParkLauncher
         carBuilder = new PassengerCarBuilder();
         carBuilder.SetName("Mitsubishi Lancer");
         carBuilder.SetEngine(new Engine() { Power = 86, Volume = 1998, Type = "diesel", Serial = "4BT39C70D5" });
-        carBuilder.SetChassis(new Chassis() { Wheels = 4, Vin = "WP0CA29924S650563", Load = 720 });
+        carBuilder.SetChassis(new Chassis() { Wheels = 4, Vin = "2C4GM68475R667819", Load = 720 });
         carBuilder.SetTransmission(new Transmission() { Gears = 5, Type = "manual", Manufacturer = "Mitsubishi" });
 
         try

@@ -4,7 +4,7 @@ using OpenQA.Selenium.Firefox;
 
 namespace FrameworkTask.Driver
 {
-    internal class DriverSingleton
+    public class DriverSingleton
     {
         private static DriverSingleton? instance;
         private static IWebDriver? driver;
