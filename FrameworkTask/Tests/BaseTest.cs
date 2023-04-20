@@ -2,15 +2,18 @@
 using FrameworkTask.Model;
 using FrameworkTask.Pages;
 using FrameworkTask.Service;
+using NLog;
 
 namespace FrameworkTask.Tests
 {
-    public class BaseTest: IDisposable
+    public abstract class BaseTest: IDisposable
     {
         public DriverSingleton driverSingleton;
+        public CloudGoogleSearchPage cloudGoogleSearchPage;
         public CloudGoogleCalculatorPage cloudGoogleCalculatorPage;
         public YopmailPage yopmailPage;
         public ComputeEngineRequestModel model;
+        public static Logger logger;
 
         public BaseTest()
         {
@@ -18,8 +21,11 @@ namespace FrameworkTask.Tests
                 Path.DirectorySeparatorChar + @"Config\", "appsettings.*.json").FirstOrDefault();
             model = ConfigReader.Read(configPath);
 
+            logger = LogManager.GetCurrentClassLogger();
+
             driverSingleton = DriverSingleton.Create("firefox");
             driverSingleton.GetDriver.Manage().Window.Maximize();
+            cloudGoogleSearchPage = new(driverSingleton.GetDriver);
             cloudGoogleCalculatorPage = new(driverSingleton.GetDriver);
             yopmailPage = new(driverSingleton.GetDriver);
         }
@@ -27,6 +33,7 @@ namespace FrameworkTask.Tests
         public void Dispose()
         {
             driverSingleton.CloseDriver();
+            LogManager.Shutdown();
         }
     }
 }

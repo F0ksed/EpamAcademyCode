@@ -14,8 +14,10 @@ namespace FrameworkTask.Pages
         By checkMailButton = By.XPath("//*[@class = 'nw']/button[2]");
         By currentMailboxAddress = By.XPath("//*[@class='bname']");
         By refreshButton = By.Id("refresh");
+        By iframeMail = By.Id("ifmail");
+        By mailContentEstimatedCost = By.XPath("//*[@id = 'mail']//h2");
 
-        public YopmailPageMap(IWebDriver driver) 
+        public YopmailPageMap(IWebDriver driver)
         {
             this.driver = driver;
             wait = new(this.driver, TimeSpan.FromSeconds(5));
@@ -38,7 +40,16 @@ namespace FrameworkTask.Pages
                 wait.Until(ExpectedConditions.ElementExists(currentMailboxAddress));
                 return driver.FindElement(currentMailboxAddress);
             }
-        }        
+        }
         public IWebElement RefreshButton => driver.FindElement(refreshButton);
+        public IWebElement IfrmaeMail => driver.FindElement(iframeMail);
+        public IWebElement MailContentEstimatedCost
+        {
+            get
+            {
+                wait.Until(ExpectedConditions.ElementExists(mailContentEstimatedCost));
+                return driver.FindElement(mailContentEstimatedCost);
+            }
+        }
     }
 }

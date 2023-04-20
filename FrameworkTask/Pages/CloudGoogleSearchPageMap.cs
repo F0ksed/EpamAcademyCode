@@ -1,12 +1,18 @@
 ﻿using OpenQA.Selenium;
+using SeleniumExtras.WaitHelpers;
 
 namespace FrameworkTask.Pages
 {
-    internal class CloudGoogleSearchPageMap: CloudGoogleBasePageMap
+    public class CloudGoogleSearchPageMap: CloudGoogleBasePageMap
     {
         public CloudGoogleSearchPageMap(IWebDriver driver): base(driver) { }
 
-        public IWebElement SearchResult(string headline) => driver.FindElement(By.XPath(
-            $"//div[@class = 'gs-title']/a[child::*[contains(., '{headline}')]]"));
+        public IWebElement SearchResult(string headline)
+        {
+            wait.Until(ExpectedConditions.ElementExists(By.XPath(
+                $"//div[@class = 'gs-title']/a[child::*[contains(., '{headline}')]]")));
+            return driver.FindElement(By.XPath(
+                $"//div[@class = 'gs-title']/a[child::*[contains(., '{headline}')]]"));
+        }
     }
 }

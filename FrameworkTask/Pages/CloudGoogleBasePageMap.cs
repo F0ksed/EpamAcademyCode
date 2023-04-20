@@ -1,12 +1,14 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using SeleniumExtras.WaitHelpers;
 
 namespace FrameworkTask.Pages
 {
-    internal class CloudGoogleBasePageMap
+    public class CloudGoogleBasePageMap
     {
         internal protected IWebDriver driver;
         internal WebDriverWait wait;
+
         By searchBar = By.XPath("//input[@*[contains(., 'search-field')]]");
 
         public CloudGoogleBasePageMap(IWebDriver driver)
@@ -15,6 +17,13 @@ namespace FrameworkTask.Pages
             wait = new(this.driver, TimeSpan.FromSeconds(10));
         }
 
-        public IWebElement SearchBar => driver.FindElement(searchBar);
+        public IWebElement SearchBar
+        {
+            get
+            {
+                wait.Until(ExpectedConditions.ElementIsVisible(searchBar));
+                return driver.FindElement(searchBar);
+            }
+        }
     }
 }

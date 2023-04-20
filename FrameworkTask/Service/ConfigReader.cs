@@ -3,7 +3,7 @@ using FrameworkTask.Model;
 
 namespace FrameworkTask.Service
 {
-    internal static class ConfigReader
+    public static class ConfigReader
     {
         public static ComputeEngineRequestModel Read(string configPath)
         {

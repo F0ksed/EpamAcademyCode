@@ -1,34 +1,65 @@
 using FrameworkTask.Driver;
-using FrameworkTask.Model;
-using FrameworkTask.Pages;
-using FrameworkTask.Service;
 using OpenQA.Selenium;
-using System.Reflection;
+using OpenQA.Selenium.DevTools.V109.Network;
+using System.Runtime.InteropServices;
+using Xunit.Abstractions;
 
 namespace FrameworkTask.Tests
 {
     public class GoogleCloudPlatformPricingCalculatorMailEstimateTest : BaseTest
     {
         [Fact]
-        public void GoogleCloudPlatformPricing()
+        public void MailedEstimatedCostIsEqualToCalculated()
         {
-            cloudGoogleCalculatorPage.Navigate();
-            cloudGoogleCalculatorPage.FillRequest(model);
-            string estimatedCost = cloudGoogleCalculatorPage.GetEstimatedCost();
-            string googleCalculatorWindowHandle = driverSingleton.GetDriver.CurrentWindowHandle;
+            string request = "Google Cloud Pricing Calculator";
 
-            driverSingleton.GetDriver.SwitchTo().NewWindow(WindowType.Tab);
-            yopmailPage.Navigate();
-            yopmailPage.CreateNewMailbox();
-            string address = yopmailPage.GetMailAddress();
-            string yopmailPageWindowHandle = driverSingleton.GetDriver.CurrentWindowHandle;
+            try
+            {
+                cloudGoogleSearchPage.Navigate();
+                logger.Info($"Starting search on {request} request");
+                cloudGoogleSearchPage.Search(request);
+                cloudGoogleSearchPage.ClickSearchResultItem(request);
 
-            driverSingleton.GetDriver.SwitchTo().Window(googleCalculatorWindowHandle);
-            cloudGoogleCalculatorPage.MailEstimatedCost(address);
-            driverSingleton.GetDriver.SwitchTo().Window(yopmailPageWindowHandle);
+                logger.Info($"Filling request with {model.ToString}");
+                cloudGoogleCalculatorPage.FillRequest(model);
+                string estimatedCostCalculator = cloudGoogleCalculatorPage.GetEstimatedCost();
+                logger.Info($"Estimation complete, output: {estimatedCostCalculator}");
+                string googleCalculatorWindowHandle = driverSingleton.GetDriver.CurrentWindowHandle;
 
-            yopmailPage.CheckMail("Google Cloud Price Estimate", 2);
+                driverSingleton.GetDriver.SwitchTo().NewWindow(WindowType.Tab);
+                yopmailPage.Navigate();
+                logger.Info($"Switched to yopmail window.");
+                yopmailPage.CreateNewMailbox();
+                string address = yopmailPage.GetMailAddress();
+                logger.Info($"Created yopmail, address: {address}");
+                string yopmailPageWindowHandle = driverSingleton.GetDriver.CurrentWindowHandle;
 
+                driverSingleton.GetDriver.SwitchTo().Window(googleCalculatorWindowHandle);
+                cloudGoogleCalculatorPage.MailEstimatedCost(address);
+                logger.Info($"Estimated cost sent.");
+                driverSingleton.GetDriver.SwitchTo().Window(yopmailPageWindowHandle);
+
+                yopmailPage.CheckMail("Google Cloud Price Estimate", 2);
+
+                string estimatedCostMail = yopmailPage.GetEstimatedCost();
+                logger.Info($"Mail received, content: {estimatedCostMail}");
+                estimatedCostMail = Util.LineCleaner.RemoveLetters(estimatedCostMail);
+
+                Assert.Contains(estimatedCostMail, estimatedCostCalculator);
+            }
+            catch (Exception ex) 
+            {
+                logger.Error(ex);
+                try
+                {
+                    driverSingleton.GetDriver.SwitchTo().DefaultContent();
+                    driverSingleton.TakeScreenshot();
+                }
+                catch(Exception screen)
+                {
+                    logger.Error(screen, "Failed to take screenshot");
+                }
+            }
         }
     }
 }

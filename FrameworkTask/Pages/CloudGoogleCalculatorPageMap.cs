@@ -3,9 +3,11 @@ using SeleniumExtras.WaitHelpers;
 
 namespace FrameworkTask.Pages
 {
-    internal class CloudGoogleCalculatorPageMap : CloudGoogleBasePageMap
+    public class CloudGoogleCalculatorPageMap : CloudGoogleBasePageMap
     {
-        By computeEngineTab = By.XPath("//div[@class='tab-holder compute']");
+        By iframeOuter = By.XPath("//article[@id='cloud-site']//iframe");
+        By iframeCalculator = By.XPath("//*[@id = 'maia-main']//iframe");
+        By computeEngineTab = By.Id("tab-item-1");
         By numberOfInstancesField = By.Id("input_95");
         By osAndSoftwareTab = By.Id("select_108");
         By provisioningModelTab = By.Id("select_112");
@@ -25,11 +27,13 @@ namespace FrameworkTask.Pages
 
         public CloudGoogleCalculatorPageMap(IWebDriver driver) : base(driver) { }
 
+        public By IframeOuter => iframeOuter;
+        public By IframeCalculator => iframeCalculator;
         public IWebElement ComputeEngineTab
         {
             get
             {
-                wait.Until(ExpectedConditions.ElementExists(computeEngineTab));
+                wait.Until(ExpectedConditions.ElementToBeClickable(computeEngineTab));
                 return driver.FindElement(computeEngineTab);
             }
         }

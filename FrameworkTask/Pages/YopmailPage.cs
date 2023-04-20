@@ -44,10 +44,7 @@ namespace FrameworkTask.Pages
             Map.CheckMailButton.Click();
         }
 
-        public string GetMailAddress()
-        {
-            return Map.CurrentMailboxAddress.Text;
-        }
+        public string GetMailAddress() => Map.CurrentMailboxAddress.Text;        
 
         //hack
         public void CheckMail(string subject, int tries = 2)
@@ -75,6 +72,14 @@ namespace FrameworkTask.Pages
                     driver.SwitchTo().DefaultContent();
                 }
             }
+        }
+
+        public string GetEstimatedCost()
+        {
+            driver.SwitchTo().Frame(Map.IfrmaeMail);
+            string content = Map.MailContentEstimatedCost.Text;
+            driver.SwitchTo().DefaultContent();
+            return content;
         }
     }
 }

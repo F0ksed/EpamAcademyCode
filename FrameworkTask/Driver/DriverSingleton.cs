@@ -40,13 +40,27 @@ namespace FrameworkTask.Driver
             {
                 return driver;
             }
-        }
-        
+        }        
 
         public void CloseDriver() 
         {
             driver.Quit();
             instance = null;
+        }
+
+        public void TakeScreenshot()
+        {
+            try
+            {
+                Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
+                screenshot.SaveAsFile(Directory.GetCurrentDirectory() +
+                    Path.DirectorySeparatorChar +
+                    DateTime.Now.ToString("yyy-MM-dd_HH-mm-ss") + ".jpg");
+            }
+            catch 
+            {
+                
+            }
         }
     }
 }
