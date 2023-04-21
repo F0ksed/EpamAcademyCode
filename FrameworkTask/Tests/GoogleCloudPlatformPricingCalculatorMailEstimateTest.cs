@@ -59,6 +59,7 @@ namespace FrameworkTask.Tests
                 {
                     logger.Error(screen, "Failed to take screenshot");
                 }
+                throw;
             }
         }
     }
