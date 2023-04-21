@@ -8,7 +8,7 @@ namespace FrameworkTask.Tests
 {
     public class GoogleCloudPlatformPricingCalculatorMailEstimateTest : BaseTest
     {
-        [Fact]
+        [Fact, Trait("Category", "Smoke")]
         public void MailedEstimatedCostIsEqualToCalculated()
         {
             string request = "Google Cloud Pricing Calculator";
