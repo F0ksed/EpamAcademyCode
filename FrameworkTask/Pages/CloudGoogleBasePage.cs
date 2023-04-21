@@ -4,10 +4,10 @@ using OpenQA.Selenium.Support.UI;
 namespace FrameworkTask.Pages
 {
     public abstract class CloudGoogleBasePage
-    {
+    {      
         internal IWebDriver driver;
         internal WebDriverWait wait;
-
+        
         public CloudGoogleBasePage(IWebDriver driver) 
         {
             this.driver = driver;
