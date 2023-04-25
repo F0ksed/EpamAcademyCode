@@ -1,6 +1,7 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
+using OpenQA.Selenium.Interactions;
 
 namespace FrameworkTask.Driver
 {
@@ -20,15 +21,18 @@ namespace FrameworkTask.Driver
                 {
                     case "firefox":
                         {
-                            driver = new FirefoxDriver();
+                            FirefoxOptions options = new();
+                            driver = new FirefoxDriver(options);
                             break;
                         }
                     default:
                         {
-                            driver = new ChromeDriver();
+                            ChromeOptions options = new();
+                            options.AddArgument("--whitelisted-ips='http://localhost:8080'");
+                            driver = new ChromeDriver(options);
                             break;
                         }
-                }
+                }           
             }
 
             return instance;

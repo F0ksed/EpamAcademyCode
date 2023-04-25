@@ -22,7 +22,7 @@ namespace FrameworkTask.Tests
             model = ConfigReader.Read(configPath);
 
             logger = LogManager.GetCurrentClassLogger();
-            driverSingleton = DriverSingleton.Create(Environment.GetEnvironmentVariable("Browser"));
+            driverSingleton = DriverSingleton.Create("Chrome");
             driverSingleton.GetDriver.Manage().Window.Maximize();
             cloudGoogleSearchPage = new(driverSingleton.GetDriver);
             cloudGoogleCalculatorPage = new(driverSingleton.GetDriver);
