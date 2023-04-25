@@ -8,7 +8,7 @@ namespace FrameworkTask.Pages
 
         public CloudGoogleSearchPage(IWebDriver driver): base(driver) { }
 
-        CloudGoogleSearchPageMap Map => new CloudGoogleSearchPageMap(driver);
+        new CloudGoogleSearchPageMap Map => new (driver);
 
         public void Navigate() => driver.Navigate().GoToUrl(url);       
         

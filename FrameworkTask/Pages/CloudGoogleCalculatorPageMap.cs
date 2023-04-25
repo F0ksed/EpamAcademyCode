@@ -7,7 +7,7 @@ namespace FrameworkTask.Pages
     {
         By iframeOuter = By.XPath("//article[@id='cloud-site']//iframe");
         By iframeCalculator = By.XPath("//*[@id = 'maia-main']//iframe");
-        By computeEngineTab = By.Id("tab-item-1");
+        By computeEngineTab = By.XPath("//md-content/md-card/div/md-card-content[1]/md-tabs/md-tabs-wrapper/md-tabs-canvas/md-pagination-wrapper/md-tab-item[1]");
         By numberOfInstancesField = By.Id("input_95");
         By osAndSoftwareTab = By.Id("select_108");
         By provisioningModelTab = By.Id("select_112");
@@ -33,7 +33,7 @@ namespace FrameworkTask.Pages
         {
             get
             {
-                wait.Until(ExpectedConditions.ElementToBeClickable(computeEngineTab));
+                wait.Until(ExpectedConditions.ElementIsVisible(computeEngineTab));
                 return driver.FindElement(computeEngineTab);
             }
         }

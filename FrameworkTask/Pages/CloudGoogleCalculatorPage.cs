@@ -10,7 +10,7 @@ namespace FrameworkTask.Pages
 
         public CloudGoogleCalculatorPage(IWebDriver driver): base(driver) { }
 
-        private CloudGoogleCalculatorPageMap Map => new CloudGoogleCalculatorPageMap(driver);
+        new private CloudGoogleCalculatorPageMap Map => new (driver);
 
         public void Navigate() => driver.Navigate().GoToUrl(url);
 
@@ -19,7 +19,19 @@ namespace FrameworkTask.Pages
             wait.Until(ExpectedConditions.FrameToBeAvailableAndSwitchToIt(Map.IframeOuter));
             wait.Until(ExpectedConditions.FrameToBeAvailableAndSwitchToIt(Map.IframeCalculator));
 
-            Map.ComputeEngineTab.Click();
+            try
+            {
+                Map.ComputeEngineTab.Click();
+            }
+            catch (Exception ex) when (ex is NullReferenceException || ex is WebDriverException)
+            {
+                logger.Error(ex);
+                driver.SwitchTo().DefaultContent();
+                wait.Until(ExpectedConditions.FrameToBeAvailableAndSwitchToIt(Map.IframeOuter));
+                wait.Until(ExpectedConditions.FrameToBeAvailableAndSwitchToIt(Map.IframeCalculator));
+                Map.ComputeEngineTab.Click();
+            }
+
             Map.NumberOfInstancesField.SendKeys(request.NumberOfInstances);
 
             Map.OsAndSoftwareTab.Click();

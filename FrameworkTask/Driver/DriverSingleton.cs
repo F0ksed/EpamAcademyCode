@@ -6,8 +6,8 @@ namespace FrameworkTask.Driver
 {
     public class DriverSingleton
     {
-        private static DriverSingleton? instance;
-        private static IWebDriver? driver;
+        private static DriverSingleton instance;
+        private static IWebDriver driver;
 
         private DriverSingleton() {  }
 
@@ -34,7 +34,7 @@ namespace FrameworkTask.Driver
             return instance;
         }
 
-        public IWebDriver? GetDriver
+        public IWebDriver GetDriver
         {
             get
             {
@@ -50,17 +50,10 @@ namespace FrameworkTask.Driver
 
         public void TakeScreenshot()
         {
-            try
-            {
-                Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
-                screenshot.SaveAsFile(Directory.GetCurrentDirectory() +
-                    Path.DirectorySeparatorChar +
-                    DateTime.Now.ToString("yyy-MM-dd_HH-mm-ss") + ".jpg");
-            }
-            catch 
-            {
-                
-            }
+            Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
+            screenshot.SaveAsFile(Directory.GetCurrentDirectory() +
+                Path.DirectorySeparatorChar +
+                DateTime.Now.ToString("yyy-MM-dd_HH-mm-ss") + ".jpg");
         }
     }
 }

@@ -55,12 +55,27 @@ namespace FrameworkTask.Tests
                     driverSingleton.GetDriver.SwitchTo().DefaultContent();
                     driverSingleton.TakeScreenshot();
                 }
-                catch(Exception screen)
+                catch(Exception scr)
                 {
-                    logger.Error(screen, "Failed to take screenshot");
+                    logger.Error(scr, "Failed to take a screenshot");
+                    throw;
                 }
                 throw;
             }
+        }
+
+        [Fact, Trait("Category", "Debug")]
+        public void CalculatorDebug()
+        {
+            string request = "Google Cloud Pricing Calculator";
+
+            cloudGoogleSearchPage.Navigate();
+
+            cloudGoogleSearchPage.Search(request);
+            cloudGoogleSearchPage.ClickSearchResultItem(request);
+
+            cloudGoogleCalculatorPage.FillRequest(model);
+            string estimatedCostCalculator = cloudGoogleCalculatorPage.GetEstimatedCost();            
         }
     }
 }

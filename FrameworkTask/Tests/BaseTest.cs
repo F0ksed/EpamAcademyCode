@@ -8,12 +8,12 @@ namespace FrameworkTask.Tests
 {
     public abstract class BaseTest: IDisposable
     {
-        public DriverSingleton driverSingleton;
-        public CloudGoogleSearchPage cloudGoogleSearchPage;
-        public CloudGoogleCalculatorPage cloudGoogleCalculatorPage;
-        public YopmailPage yopmailPage;
-        public ComputeEngineRequestModel model;
-        public static Logger logger;
+        internal DriverSingleton driverSingleton;
+        internal CloudGoogleSearchPage cloudGoogleSearchPage;
+        internal CloudGoogleCalculatorPage cloudGoogleCalculatorPage;
+        internal YopmailPage yopmailPage;
+        internal ComputeEngineRequestModel model;
+        internal static Logger logger;
 
         public BaseTest()
         {
@@ -22,8 +22,7 @@ namespace FrameworkTask.Tests
             model = ConfigReader.Read(configPath);
 
             logger = LogManager.GetCurrentClassLogger();
-
-            driverSingleton = DriverSingleton.Create("firefox");
+            driverSingleton = DriverSingleton.Create(Environment.GetEnvironmentVariable("Browser"));
             driverSingleton.GetDriver.Manage().Window.Maximize();
             cloudGoogleSearchPage = new(driverSingleton.GetDriver);
             cloudGoogleCalculatorPage = new(driverSingleton.GetDriver);
@@ -32,6 +31,7 @@ namespace FrameworkTask.Tests
 
         public void Dispose()
         {
+            GC.SuppressFinalize(this);
             driverSingleton.CloseDriver();
             LogManager.Shutdown();
         }
