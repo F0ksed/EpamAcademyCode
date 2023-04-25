@@ -3,6 +3,8 @@ using FrameworkTask.Model;
 using FrameworkTask.Pages;
 using FrameworkTask.Service;
 using NLog;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace FrameworkTask.Tests
 {
@@ -22,11 +24,13 @@ namespace FrameworkTask.Tests
             model = ConfigReader.Read(configPath);
 
             logger = LogManager.GetCurrentClassLogger();
-            driverSingleton = DriverSingleton.Create("Chrome");
+            driverSingleton = DriverSingleton.Create(Environment.GetEnvironmentVariable("Browser"));
             driverSingleton.GetDriver.Manage().Window.Maximize();
             cloudGoogleSearchPage = new(driverSingleton.GetDriver);
             cloudGoogleCalculatorPage = new(driverSingleton.GetDriver);
             yopmailPage = new(driverSingleton.GetDriver);
+            logger.Info($"New test, browser {Environment.GetEnvironmentVariable("Browser")}, " +
+                $"configuration {typeof(BaseTest).Assembly.GetCustomAttribute<AssemblyConfigurationAttribute>().Configuration}");
         }
 
         public void Dispose()

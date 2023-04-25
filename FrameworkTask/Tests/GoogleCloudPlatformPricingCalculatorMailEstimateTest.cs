@@ -20,7 +20,7 @@ namespace FrameworkTask.Tests
                 cloudGoogleSearchPage.Search(request);
                 cloudGoogleSearchPage.ClickSearchResultItem(request);
 
-                logger.Info($"Filling request with {model.ToString}");
+                logger.Info($"Filling request with {model.GetDescription()}");
                 cloudGoogleCalculatorPage.FillRequest(model);
                 string estimatedCostCalculator = cloudGoogleCalculatorPage.GetEstimatedCost();
                 logger.Info($"Estimation complete, output: {estimatedCostCalculator}");

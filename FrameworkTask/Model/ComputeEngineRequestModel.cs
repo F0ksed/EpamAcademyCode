@@ -1,4 +1,6 @@
-﻿namespace FrameworkTask.Model
+﻿using System.Reflection;
+
+namespace FrameworkTask.Model
 {
     public class ComputeEngineRequestModel
     {
@@ -13,5 +15,17 @@
         public string LocalSsds { get; set; }
         public string DatecenterLocation { get; set; }
         public string CommittedUsage { get; set; }
+
+        public string GetDescription()
+        {
+            string output = new("");
+
+            foreach (PropertyInfo info in GetType().GetProperties())
+            {
+                output += info.Name + ": " + info.GetValue(this).ToString() + Environment.NewLine;
+            }
+
+            return output;
+        }
     }
 }
